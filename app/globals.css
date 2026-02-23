@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@layer utilities {
+  .tiptap-editor p {
+    margin-bottom: 0.5rem;
+  }
+  .tiptap-editor p:last-child {
+    margin-bottom: 0;
+  }
+  .tiptap-editor strong {
+    font-weight: 700;
+    color: inherit;
+  }
+  .tiptap-editor em {
+    font-style: italic;
+    color: inherit;
+  }
+  .tiptap-editor u {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    color: inherit;
+  }
+}
