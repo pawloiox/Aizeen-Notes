@@ -4,15 +4,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Note, NoteColor } from '@/types';
 import { colorMap } from '@/lib/colors';
-import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List } from 'lucide-react';
+import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
+import Image from '@tiptap/extension-image';
 
 const extensions = [
   StarterKit,
   Underline,
+  Image.configure({
+    inline: true,
+    HTMLAttributes: {
+      class: 'rounded-lg max-w-full h-auto my-2',
+    },
+  }),
 ];
 
 interface NoteEditorProps {
@@ -34,6 +41,41 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
 
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const menuContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuContainerRef.current && !menuContainerRef.current.contains(event.target as Node)) {
+        setShowColors(false);
+        setShowTags(false);
+      }
+    };
+
+    if (showColors || showTags) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showColors, showTags]);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && editor) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        editor.chain().focus().setImage({ src: result }).run();
+      };
+      reader.readAsDataURL(file);
+    }
+    // Reset input so the same file can be selected again
+    if (e.target) {
+      e.target.value = '';
+    }
+  };
 
   const editor = useEditor({
     extensions,
@@ -201,6 +243,23 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
                   >
                     <List size={18} />
                   </button>
+                  <div className="w-px h-4 bg-white/20 mx-1" />
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+                    title="Add Image"
+                  >
+                    <ImageIcon size={18} />
+                  </button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
                 </div>
               )}
 
@@ -226,7 +285,7 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
             </div>
 
             <div className="flex items-center justify-between p-4 bg-black/10 border-t border-white/10">
-              <div className="flex items-center gap-2 relative">
+              <div className="flex items-center gap-2 relative" ref={menuContainerRef}>
                 <button
                   onClick={() => {
                     setShowColors(!showColors);

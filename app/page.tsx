@@ -108,7 +108,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 selection:bg-zinc-200 dark:selection:bg-zinc-800 selection:text-zinc-900 dark:selection:text-zinc-100 font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 selection:bg-zinc-200 dark:selection:bg-zinc-800 selection:text-zinc-900 dark:selection:text-zinc-100 font-sans transition-colors duration-300 flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-900 transition-colors duration-300">
         <div className="w-full px-3 h-16 flex items-center justify-between">
@@ -123,7 +123,7 @@ export default function Home() {
               <div className="w-8 h-8 flex items-center justify-center overflow-hidden">
                 <Image src="/img/AizeenLogo.png" alt="Aizeen Logo" width={32} height={32} className="object-contain" />
               </div>
-              <span className="text-xl font-medium tracking-tight hidden sm:block">Aizeen Notes</span>
+              <span className="text-xl font-medium tracking-tight hidden sm:block">Notes</span>
             </div>
           </div>
 
@@ -154,7 +154,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center">
+      <main className="max-w-7xl mx-auto px-4 py-8 flex flex-col items-center flex-1 w-full">
         {/* Take a note input */}
         <div className="w-full max-w-2xl mb-12">
           <div
@@ -252,6 +252,19 @@ export default function Home() {
           )}
         </div>
       </main>
+
+      {/* Footer Logo */}
+      <footer className="w-full py-8 flex justify-center items-center mt-auto">
+        <a href="https://www.instagram.com/pawloiox/"> 
+        <Image 
+          src="/img/PAG_logo.png" 
+          alt="Developer Logo" 
+          width={48} 
+          height={48} 
+          className="opacity-20 hover:opacity-40 transition-opacity duration-300 object-contain" 
+        />
+        </a>
+      </footer>
 
       {/* Editor Modal */}
       <NoteEditor

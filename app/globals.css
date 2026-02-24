@@ -37,4 +37,14 @@
   .tiptap-editor li p {
     margin-bottom: 0;
   }
+  .tiptap-editor img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .tiptap-editor img.ProseMirror-selectednode {
+    outline: 2px solid white;
+  }
 }

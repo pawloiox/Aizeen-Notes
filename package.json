@@ -15,6 +15,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@google/genai": "^1.17.0",
     "@hookform/resolvers": "^5.2.1",
+    "@tiptap/extension-image": "^3.20.0",
     "@tiptap/extension-underline": "^3.20.0",
     "@tiptap/react": "^3.20.0",
     "@tiptap/starter-kit": "^3.20.0",
