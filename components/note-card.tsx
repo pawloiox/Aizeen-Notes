@@ -32,8 +32,35 @@ export function NoteCard({ note, onClick, onTogglePin, onDelete }: NoteCardProps
         colorClass.text
       )}
     >
+      {note.title && (
+        <h3 className="font-semibold text-lg leading-tight pr-12">{note.title}</h3>
+      )}
+      
+      {note.content && (
+        <div 
+          className={cn(
+            "tiptap-editor text-sm opacity-90 line-clamp-6",
+            !note.title && "pr-12"
+          )}
+          dangerouslySetInnerHTML={{ __html: note.content }}
+        />
+      )}
+
+      {note.tags && note.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mt-2">
+          {note.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider rounded-full bg-black/20 text-white/80"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
       {/* Actions (visible on hover) */}
-      <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+      <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 z-10">
         <button
           onClick={onTogglePin}
           className="p-1.5 rounded-full bg-black/20 hover:bg-black/40 text-white/80 hover:text-white transition-colors"
@@ -52,32 +79,8 @@ export function NoteCard({ note, onClick, onTogglePin, onDelete }: NoteCardProps
 
       {/* Pin indicator (always visible if pinned) */}
       {note.pinned && (
-        <div className="absolute top-3 right-3 group-hover:hidden text-white/50">
+        <div className="absolute top-3 right-3 group-hover:hidden text-white/50 z-10">
           <Pin size={16} />
-        </div>
-      )}
-
-      {note.title && (
-        <h3 className="font-semibold text-lg leading-tight pr-12">{note.title}</h3>
-      )}
-      
-      {note.content && (
-        <div 
-          className="tiptap-editor text-sm opacity-90 line-clamp-6"
-          dangerouslySetInnerHTML={{ __html: note.content }}
-        />
-      )}
-
-      {note.tags && note.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mt-2">
-          {note.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider rounded-full bg-black/20 text-white/80"
-            >
-              {tag}
-            </span>
-          ))}
         </div>
       )}
     </motion.div>
