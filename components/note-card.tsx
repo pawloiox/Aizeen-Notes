@@ -63,7 +63,7 @@ export function NoteCard({ note, onClick, onTogglePin, onDelete }: NoteCardProps
       
       {note.content && (
         <div 
-          className="text-sm opacity-90 line-clamp-6 [&_p]:mb-1 [&_p:last-child]:mb-0 [&_strong]:font-bold [&_em]:italic [&_u]:underline"
+          className="tiptap-editor text-sm opacity-90 line-clamp-6"
           dangerouslySetInnerHTML={{ __html: note.content }}
         />
       )}

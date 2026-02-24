@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Note, NoteColor } from '@/types';
 import { colorMap } from '@/lib/colors';
-import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon } from 'lucide-react';
+import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -30,6 +30,7 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
   const [tagInput, setTagInput] = useState('');
   const [showColors, setShowColors] = useState(false);
   const [showTags, setShowTags] = useState(false);
+  const [, forceUpdate] = useState({});
 
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -41,9 +42,12 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
     },
+    onTransaction: () => {
+      forceUpdate({});
+    },
     editorProps: {
       attributes: {
-        class: 'focus:outline-none w-full min-h-[150px] bg-transparent text-lg outline-none placeholder:text-white/30 text-white/90 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-bold [&_em]:italic [&_u]:underline',
+        class: 'tiptap-editor focus:outline-none w-full min-h-[150px] bg-transparent text-lg outline-none placeholder:text-white/30 text-white/90',
       },
     },
   });
@@ -149,6 +153,8 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
               {editor && (
                 <div className="flex items-center gap-1 mb-2 border-b border-white/10 pb-2">
                   <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleBold().run()}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
@@ -159,6 +165,8 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
                     <Bold size={18} />
                   </button>
                   <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleItalic().run()}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
@@ -169,6 +177,8 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
                     <Italic size={18} />
                   </button>
                   <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleUnderline().run()}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
@@ -177,6 +187,19 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
                     title="Underline"
                   >
                     <UnderlineIcon size={18} />
+                  </button>
+                  <div className="w-px h-4 bg-white/20 mx-1" />
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    className={cn(
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      editor.isActive('bulletList') && "bg-white/20 text-white"
+                    )}
+                    title="Bullet List"
+                  >
+                    <List size={18} />
                   </button>
                 </div>
               )}
