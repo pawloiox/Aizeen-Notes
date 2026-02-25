@@ -4,16 +4,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Note, NoteColor } from '@/types';
 import { colorMap } from '@/lib/colors';
-import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, Image as ImageIcon } from 'lucide-react';
+import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, Image as ImageIcon, Strikethrough, Type } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { FontSize } from './extensions/font-size';
+import { FontSizeDrum } from './font-size-drum';
 
 const extensions = [
   StarterKit,
   Underline,
+  TextStyle,
+  FontSize,
   Image.configure({
     inline: true,
     HTMLAttributes: {
@@ -37,12 +42,14 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
   const [tagInput, setTagInput] = useState('');
   const [showColors, setShowColors] = useState(false);
   const [showTags, setShowTags] = useState(false);
+  const [showFontSizes, setShowFontSizes] = useState(false);
   const [, forceUpdate] = useState({});
 
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuContainerRef = useRef<HTMLDivElement>(null);
+  const toolbarMenuContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -50,16 +57,26 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
         setShowColors(false);
         setShowTags(false);
       }
+      if (toolbarMenuContainerRef.current && !toolbarMenuContainerRef.current.contains(event.target as Node)) {
+        setShowFontSizes(false);
+      }
     };
 
-    if (showColors || showTags) {
+    if (showColors || showTags || showFontSizes) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showColors, showTags]);
+  }, [showColors, showTags, showFontSizes]);
+
+  const fontSizes = [
+    { label: 'Small', value: '12px' },
+    { label: 'Normal', value: '16px' },
+    { label: 'Large', value: '20px' },
+    { label: 'Huge', value: '24px' },
+  ];
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -193,7 +210,10 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
               />
               
               {editor && (
-                <div className="flex items-center gap-1 mb-2 border-b border-white/10 pb-2">
+                <div className="flex items-center gap-1 mb-2 border-b border-white/10 pb-2 relative" ref={toolbarMenuContainerRef}>
+                  <FontSizeDrum editor={editor} />
+                  
+                  <div className="w-px h-4 bg-white/20 mx-1" />
                   <button
                     type="button"
                     onMouseDown={(e) => e.preventDefault()}
@@ -229,6 +249,18 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
                     title="Underline"
                   >
                     <UnderlineIcon size={18} />
+                  </button>
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => editor.chain().focus().toggleStrike().run()}
+                    className={cn(
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      editor.isActive('strike') && "bg-white/20 text-white"
+                    )}
+                    title="Strikethrough"
+                  >
+                    <Strikethrough size={18} />
                   </button>
                   <div className="w-px h-4 bg-white/20 mx-1" />
                   <button

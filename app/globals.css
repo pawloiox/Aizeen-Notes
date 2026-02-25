@@ -26,6 +26,12 @@
     text-underline-offset: 2px;
     color: inherit;
   }
+  .tiptap-editor s,
+  .tiptap-editor strike,
+  .tiptap-editor del {
+    text-decoration: line-through;
+    color: inherit;
+  }
   .tiptap-editor ul {
     list-style-type: disc;
     padding-left: 1.25rem;
