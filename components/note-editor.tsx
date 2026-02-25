@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Note, NoteColor } from '@/types';
 import { colorMap, getTagColor } from '@/lib/colors';
-import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, Image as ImageIcon, Strikethrough, Type } from 'lucide-react';
+import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Image as ImageIcon, Strikethrough, Type } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -276,6 +276,18 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
                     title="Bullet List"
                   >
                     <List size={18} />
+                  </button>
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                    className={cn(
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      editor.isActive('orderedList') && "bg-white/20 text-white"
+                    )}
+                    title="Ordered List"
+                  >
+                    <ListOrdered size={18} />
                   </button>
                   <div className="w-px h-4 bg-white/20 mx-1" />
                   <button
