@@ -72,9 +72,48 @@ export function FontSizeDrum({ editor }: FontSizeDrumProps) {
         }
       }
     };
+
+    let touchStartY = 0;
+    let touchAccumulated = 0;
+    
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+      touchAccumulated = 0;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.cancelable) {
+        e.preventDefault(); // Prevent scrolling the page
+      }
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchY; // Positive when moving up
+      
+      touchAccumulated += deltaY;
+      touchStartY = touchY; // Reset for next move
+      
+      if (Math.abs(touchAccumulated) >= 5) {
+        const delta = touchAccumulated > 0 ? 1 : -1;
+        touchAccumulated = 0;
+        
+        const prev = fontSizeRef.current;
+        const newSize = Math.max(8, Math.min(120, prev + delta));
+        if (newSize !== prev) {
+          setDirection(delta);
+          setFontSize(newSize);
+          editor.chain().setFontSize(`${newSize}px`).run();
+        }
+      }
+    };
     
     el.addEventListener('wheel', handleNativeWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleNativeWheel);
+    el.addEventListener('touchstart', handleTouchStart, { passive: true });
+    el.addEventListener('touchmove', handleTouchMove, { passive: false });
+    
+    return () => {
+      el.removeEventListener('wheel', handleNativeWheel);
+      el.removeEventListener('touchstart', handleTouchStart);
+      el.removeEventListener('touchmove', handleTouchMove);
+    };
   }, [editor]);
 
   const variants = {
