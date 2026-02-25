@@ -13,3 +13,15 @@ export const colorMap: Record<NoteColor, { bg: string; border: string; text: str
   brown: { bg: 'bg-stone-900', border: 'border-stone-800', text: 'text-stone-100' },
   gray: { bg: 'bg-gray-900', border: 'border-gray-800', text: 'text-gray-100' },
 };
+
+export const getTagColor = (tag: string): NoteColor => {
+  const colors: NoteColor[] = [
+    'red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink', 'brown', 'gray'
+  ];
+  let hash = 0;
+  for (let i = 0; i < tag.length; i++) {
+    hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+};

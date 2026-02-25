@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Note, NoteColor } from '@/types';
-import { colorMap } from '@/lib/colors';
+import { colorMap, getTagColor } from '@/lib/colors';
 import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, Image as ImageIcon, Strikethrough, Type } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditor, EditorContent } from '@tiptap/react';
@@ -161,8 +161,10 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
   const addTag = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
-      if (!tags.includes(tagInput.trim())) {
-        setTags([...tags, tagInput.trim()]);
+      const newTag = tagInput.trim();
+      if (!tags.includes(newTag)) {
+        setTags([...tags, newTag]);
+        setColor(getTagColor(newTag));
       }
       setTagInput('');
     }
