@@ -4,13 +4,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Note, NoteColor } from '@/types';
 import { colorMap, getTagColor } from '@/lib/colors';
-import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Image as ImageIcon, Strikethrough, Type } from 'lucide-react';
+import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Image as ImageIcon, Strikethrough, Type, AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
 import { TextStyle } from '@tiptap/extension-text-style';
+import TextAlign from '@tiptap/extension-text-align';
 import { FontSize } from './extensions/font-size';
 import { FontSizeDrum } from './font-size-drum';
 
@@ -19,6 +20,9 @@ const extensions = [
   Underline,
   TextStyle,
   FontSize,
+  TextAlign.configure({
+    types: ['heading', 'paragraph'],
+  }),
   Image.configure({
     inline: true,
     HTMLAttributes: {
@@ -43,6 +47,7 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
   const [showColors, setShowColors] = useState(false);
   const [showTags, setShowTags] = useState(false);
   const [showFontSizes, setShowFontSizes] = useState(false);
+  const [showAlignMenu, setShowAlignMenu] = useState(false);
   const [, forceUpdate] = useState({});
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -59,17 +64,18 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
       }
       if (toolbarMenuContainerRef.current && !toolbarMenuContainerRef.current.contains(event.target as Node)) {
         setShowFontSizes(false);
+        setShowAlignMenu(false);
       }
     };
 
-    if (showColors || showTags || showFontSizes) {
+    if (showColors || showTags || showFontSizes || showAlignMenu) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showColors, showTags, showFontSizes]);
+  }, [showColors, showTags, showFontSizes, showAlignMenu]);
 
   const fontSizes = [
     { label: 'Small', value: '12px' },
@@ -215,6 +221,96 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
                 <div className="flex items-center gap-1 mb-2 border-b border-white/10 pb-2 relative" ref={toolbarMenuContainerRef}>
                   <FontSizeDrum editor={editor} />
                   
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => setShowAlignMenu(!showAlignMenu)}
+                      className={cn(
+                        "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                        (editor.isActive({ textAlign: 'center' }) || editor.isActive({ textAlign: 'right' }) || editor.isActive({ textAlign: 'justify' })) && "bg-white/20 text-white"
+                      )}
+                      title="Text Alignment"
+                    >
+                      {editor.isActive({ textAlign: 'center' }) ? <AlignCenter size={18} /> :
+                       editor.isActive({ textAlign: 'right' }) ? <AlignRight size={18} /> :
+                       editor.isActive({ textAlign: 'justify' }) ? <AlignJustify size={18} /> :
+                       <AlignLeft size={18} />}
+                    </button>
+                    
+                    <AnimatePresence>
+                      {showAlignMenu && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 5, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 5, scale: 0.95 }}
+                          className="absolute top-full left-0 mt-1 p-1 rounded-xl bg-zinc-900 border border-zinc-800 shadow-xl flex gap-1 z-50"
+                        >
+                          <button
+                            type="button"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                              editor.chain().focus().setTextAlign('left').run();
+                              setShowAlignMenu(false);
+                            }}
+                            className={cn(
+                              "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                              editor.isActive({ textAlign: 'left' }) && "bg-white/20 text-white"
+                            )}
+                            title="Align Left"
+                          >
+                            <AlignLeft size={18} />
+                          </button>
+                          <button
+                            type="button"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                              editor.chain().focus().setTextAlign('center').run();
+                              setShowAlignMenu(false);
+                            }}
+                            className={cn(
+                              "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                              editor.isActive({ textAlign: 'center' }) && "bg-white/20 text-white"
+                            )}
+                            title="Align Center"
+                          >
+                            <AlignCenter size={18} />
+                          </button>
+                          <button
+                            type="button"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                              editor.chain().focus().setTextAlign('right').run();
+                              setShowAlignMenu(false);
+                            }}
+                            className={cn(
+                              "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                              editor.isActive({ textAlign: 'right' }) && "bg-white/20 text-white"
+                            )}
+                            title="Align Right"
+                          >
+                            <AlignRight size={18} />
+                          </button>
+                          <button
+                            type="button"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                              editor.chain().focus().setTextAlign('justify').run();
+                              setShowAlignMenu(false);
+                            }}
+                            className={cn(
+                              "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                              editor.isActive({ textAlign: 'justify' }) && "bg-white/20 text-white"
+                            )}
+                            title="Justify"
+                          >
+                            <AlignJustify size={18} />
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
                   <div className="w-px h-4 bg-white/20 mx-1" />
                   <button
                     type="button"
