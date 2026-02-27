@@ -32,5 +32,25 @@ const nextConfig: NextConfig = {
     return config;
   },
 };
+// next.config.mjs (or next.config.js)
 
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.imgur.com',
+        port: '',
+        pathname: '/**', // Allows all image paths from this domain
+      },
+      {
+        protocol: 'https',
+        hostname: 'imgur.com',
+        port: '',
+        pathname: '/**', 
+      },
+    ],
+  },
+};
 export default nextConfig;

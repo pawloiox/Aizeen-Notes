@@ -174,7 +174,7 @@ export default function Home() {
         <div className="w-full">
           {notes.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-zinc-500 gap-2">
-              <Image src="/img/AizeenLogo.png" alt="Aizeen Logo" width={64} height={64} className="opacity-20 object-contain" />
+              <Image src="https://imgur.com/iJLXUgO.png" alt="Aizeen Logo" width={64} height={64} className="opacity-20 object-contain" />
               <p className="text-lg font-medium">Notes you add appear here</p>
             </div>
           ) : (

@@ -46,7 +46,7 @@ export function Sidebar({ isOpen, onClose, notes, onNoteClick }: SidebarProps) {
             <div className="h-16 flex items-center justify-between px-4 border-b border-zinc-200 dark:border-zinc-800">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 flex items-center justify-center overflow-hidden">
-                  <Image src="/img/AizeenLogo.png" alt="Aizeen Logo" width={32} height={32} className="object-contain" />
+                  <Image src="https://imgur.com/iJLXUgO.png" alt="Aizeen Logo" width={32} height={32} className="object-contain" />
                 </div>
                 <span className="text-xl font-medium tracking-tight text-zinc-900 dark:text-zinc-50">Notes</span>
               </div>
