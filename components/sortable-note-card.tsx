@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { memo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { NoteCard } from './note-card';
@@ -13,7 +13,7 @@ interface SortableNoteCardProps {
   onDelete: (e: React.MouseEvent) => void;
 }
 
-export function SortableNoteCard({ note, onClick, onTogglePin, onDelete }: SortableNoteCardProps) {
+export const SortableNoteCard = memo(function SortableNoteCard({ note, onClick, onTogglePin, onDelete }: SortableNoteCardProps) {
   const {
     attributes,
     listeners,
@@ -49,4 +49,4 @@ export function SortableNoteCard({ note, onClick, onTogglePin, onDelete }: Sorta
       />
     </div>
   );
-}
+});

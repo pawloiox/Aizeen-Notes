@@ -84,4 +84,30 @@
   .tiptap-editor img.ProseMirror-selectednode {
     outline: 2px solid white;
   }
+  .tiptap-editor pre {
+    background: rgba(0, 0, 0, 0.2);
+    color: inherit;
+    font-family: var(--font-mono);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .tiptap-editor pre code {
+    color: inherit;
+    padding: 0;
+    background: none;
+    font-size: 0.875rem;
+    border: none;
+  }
+  .tiptap-editor code {
+    background: rgba(0, 0, 0, 0.15);
+    color: inherit;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }

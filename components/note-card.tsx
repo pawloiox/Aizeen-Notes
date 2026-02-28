@@ -1,5 +1,6 @@
 'use client';
 
+import React, { memo } from 'react';
 import { Note, NoteColor } from '@/types';
 import { colorMap } from '@/lib/colors';
 import { motion } from 'motion/react';
@@ -13,7 +14,7 @@ interface NoteCardProps {
   onDelete: (e: React.MouseEvent) => void;
 }
 
-export function NoteCard({ note, onClick, onTogglePin, onDelete }: NoteCardProps) {
+export const NoteCard = memo(function NoteCard({ note, onClick, onTogglePin, onDelete }: NoteCardProps) {
   const colorClass = colorMap[note.color as NoteColor] || colorMap.default;
 
   return (
@@ -33,14 +34,14 @@ export function NoteCard({ note, onClick, onTogglePin, onDelete }: NoteCardProps
       )}
     >
       {note.title && (
-        <h3 className="font-semibold text-lg leading-tight pr-12">{note.title}</h3>
+        <h3 className="font-semibold text-lg leading-tight pr-16">{note.title}</h3>
       )}
       
       {note.content && (
         <div 
           className={cn(
             "tiptap-editor text-sm opacity-90 line-clamp-6",
-            !note.title && "pr-12"
+            !note.title && "pr-16"
           )}
           dangerouslySetInnerHTML={{ __html: note.content }}
         />
@@ -59,8 +60,8 @@ export function NoteCard({ note, onClick, onTogglePin, onDelete }: NoteCardProps
         </div>
       )}
 
-      {/* Actions (visible on hover) */}
-      <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 z-10">
+      {/* Actions (visible on hover on desktop, always on mobile) */}
+      <div className="absolute top-3 right-3 flex items-center gap-2 opacity-100 sm:opacity-0 transition-opacity duration-200 sm:group-hover:opacity-100 z-10">
         <button
           onClick={onTogglePin}
           className="p-1.5 rounded-full bg-black/20 hover:bg-black/40 text-white/80 hover:text-white transition-colors"
@@ -77,12 +78,12 @@ export function NoteCard({ note, onClick, onTogglePin, onDelete }: NoteCardProps
         </button>
       </div>
 
-      {/* Pin indicator (always visible if pinned) */}
+      {/* Pin indicator (always visible if pinned on desktop) */}
       {note.pinned && (
-        <div className="absolute top-3 right-3 group-hover:hidden text-white/50 z-10">
+        <div className="absolute top-3 right-3 hidden sm:block sm:group-hover:hidden text-white/50 z-10">
           <Pin size={16} />
         </div>
       )}
     </motion.div>
   );
-}
+});

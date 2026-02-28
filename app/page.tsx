@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useNotes } from '@/hooks/use-notes';
 import { NoteCard } from '@/components/note-card';
 import { NoteEditor } from '@/components/note-editor';
@@ -53,17 +53,17 @@ export default function Home() {
   const pinnedNotes = filteredNotes.filter((note) => note.pinned);
   const otherNotes = filteredNotes.filter((note) => !note.pinned);
 
-  const handleCreateNote = () => {
+  const handleCreateNote = useCallback(() => {
     setEditingNote(null);
     setIsEditorOpen(true);
-  };
+  }, []);
 
-  const handleEditNote = (note: Note) => {
+  const handleEditNote = useCallback((note: Note) => {
     setEditingNote(note);
     setIsEditorOpen(true);
-  };
+  }, []);
 
-  const handleSaveNote = (noteData: Partial<Note>) => {
+  const handleSaveNote = useCallback((noteData: Partial<Note>) => {
     if (editingNote) {
       updateNote(editingNote.id, noteData);
     } else {
@@ -71,7 +71,17 @@ export default function Home() {
     }
     setIsEditorOpen(false);
     setEditingNote(null);
-  };
+  }, [editingNote, updateNote, addNote]);
+
+  const handleTogglePin = useCallback((e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    togglePin(id);
+  }, [togglePin]);
+
+  const handleDeleteNote = useCallback((e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    deleteNote(id);
+  }, [deleteNote]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -220,14 +230,8 @@ export default function Home() {
                             key={note.id}
                             note={note}
                             onClick={() => handleEditNote(note)}
-                            onTogglePin={(e) => {
-                              e.stopPropagation();
-                              togglePin(note.id);
-                            }}
-                            onDelete={(e) => {
-                              e.stopPropagation();
-                              deleteNote(note.id);
-                            }}
+                            onTogglePin={(e) => handleTogglePin(e, note.id)}
+                            onDelete={(e) => handleDeleteNote(e, note.id)}
                           />
                         ))}
                       </MasonryGrid>
@@ -256,14 +260,8 @@ export default function Home() {
                             key={note.id}
                             note={note}
                             onClick={() => handleEditNote(note)}
-                            onTogglePin={(e) => {
-                              e.stopPropagation();
-                              togglePin(note.id);
-                            }}
-                            onDelete={(e) => {
-                              e.stopPropagation();
-                              deleteNote(note.id);
-                            }}
+                            onTogglePin={(e) => handleTogglePin(e, note.id)}
+                            onDelete={(e) => handleDeleteNote(e, note.id)}
                           />
                         ))}
                       </MasonryGrid>

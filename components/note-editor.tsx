@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Note, NoteColor } from '@/types';
 import { colorMap, getTagColor } from '@/lib/colors';
-import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Image as ImageIcon, Strikethrough, Type, AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react';
+import { X, Check, Palette, Tag as TagIcon, Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Image as ImageIcon, Strikethrough, Type, AlignLeft, AlignCenter, AlignRight, AlignJustify, Code, SquareTerminal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -126,7 +126,7 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
           .getPublicUrl(fileName);
 
         // Insert into editor
-        editor.chain().focus().setImage({ src: publicUrl }).run();
+        editor.chain().setImage({ src: publicUrl }).run();
       } catch (error) {
         console.error('Error processing image:', error);
         alert('Failed to process image.');
@@ -278,8 +278,10 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                   <div className="relative shrink-0">
                     <button
                       type="button"
-                      onMouseDown={(e) => e.preventDefault()}
-                      onClick={() => setShowAlignMenu(!showAlignMenu)}
+                      onPointerDown={(e) => {
+                        e.preventDefault();
+                        setShowAlignMenu(!showAlignMenu);
+                      }}
                       className={cn(
                         "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
                         (editor.isActive({ textAlign: 'center' }) || editor.isActive({ textAlign: 'right' }) || editor.isActive({ textAlign: 'justify' })) && "bg-white/20 text-white"
@@ -302,9 +304,9 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                         >
                           <button
                             type="button"
-                            onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => {
-                              editor.chain().focus().setTextAlign('left').run();
+                            onPointerDown={(e) => {
+                              e.preventDefault();
+                              editor.chain().setTextAlign('left').run();
                               setShowAlignMenu(false);
                             }}
                             className={cn(
@@ -317,9 +319,9 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                           </button>
                           <button
                             type="button"
-                            onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => {
-                              editor.chain().focus().setTextAlign('center').run();
+                            onPointerDown={(e) => {
+                              e.preventDefault();
+                              editor.chain().setTextAlign('center').run();
                               setShowAlignMenu(false);
                             }}
                             className={cn(
@@ -332,9 +334,9 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                           </button>
                           <button
                             type="button"
-                            onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => {
-                              editor.chain().focus().setTextAlign('right').run();
+                            onPointerDown={(e) => {
+                              e.preventDefault();
+                              editor.chain().setTextAlign('right').run();
                               setShowAlignMenu(false);
                             }}
                             className={cn(
@@ -347,9 +349,9 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                           </button>
                           <button
                             type="button"
-                            onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => {
-                              editor.chain().focus().setTextAlign('justify').run();
+                            onPointerDown={(e) => {
+                              e.preventDefault();
+                              editor.chain().setTextAlign('justify').run();
                               setShowAlignMenu(false);
                             }}
                             className={cn(
@@ -368,8 +370,10 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                   <div className="w-px h-4 bg-white/20 mx-1 shrink-0" />
                   <button
                     type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => editor.chain().focus().toggleBold().run()}
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      editor.chain().toggleBold().run();
+                    }}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('bold') && "bg-white/20 text-white"
@@ -380,8 +384,10 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                   </button>
                   <button
                     type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      editor.chain().toggleItalic().run();
+                    }}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('italic') && "bg-white/20 text-white"
@@ -392,8 +398,10 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                   </button>
                   <button
                     type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => editor.chain().focus().toggleUnderline().run()}
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      editor.chain().toggleUnderline().run();
+                    }}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('underline') && "bg-white/20 text-white"
@@ -404,8 +412,10 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                   </button>
                   <button
                     type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => editor.chain().focus().toggleStrike().run()}
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      editor.chain().toggleStrike().run();
+                    }}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('strike') && "bg-white/20 text-white"
@@ -417,8 +427,39 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                   <div className="w-px h-4 bg-white/20 mx-1 shrink-0" />
                   <button
                     type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      editor.chain().toggleCode().run();
+                    }}
+                    className={cn(
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
+                      editor.isActive('code') && "bg-white/20 text-white"
+                    )}
+                    title="Inline Code"
+                  >
+                    <Code size={18} />
+                  </button>
+                  <button
+                    type="button"
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      editor.chain().toggleCodeBlock().run();
+                    }}
+                    className={cn(
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
+                      editor.isActive('codeBlock') && "bg-white/20 text-white"
+                    )}
+                    title="Code Block"
+                  >
+                    <SquareTerminal size={18} />
+                  </button>
+                  <div className="w-px h-4 bg-white/20 mx-1 shrink-0" />
+                  <button
+                    type="button"
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      editor.chain().toggleBulletList().run();
+                    }}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('bulletList') && "bg-white/20 text-white"
@@ -429,8 +470,10 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                   </button>
                   <button
                     type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                    onPointerDown={(e) => {
+                      e.preventDefault();
+                      editor.chain().toggleOrderedList().run();
+                    }}
                     className={cn(
                       "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('orderedList') && "bg-white/20 text-white"
