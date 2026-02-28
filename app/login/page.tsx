@@ -28,7 +28,7 @@ export default function LoginPage() {
   if (!isMounted) return null;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -43,15 +43,15 @@ export default function LoginPage() {
             height={64} 
             className="object-contain mb-4" 
           />
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">
             Welcome to Notes
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
+          <p className="text-sm text-zinc-400 mt-2">
             Sign in to sync your notes across devices
           </p>
         </div>
 
-        <div className="bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 sm:p-8 shadow-sm">
+        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 sm:p-8 shadow-sm">
           <Auth
             supabaseClient={supabase}
             appearance={{
@@ -59,25 +59,25 @@ export default function LoginPage() {
               variables: {
                 default: {
                   colors: {
-                    brand: '#18181b', // zinc-900
-                    brandAccent: '#27272a', // zinc-800
-                    brandButtonText: 'white',
-                    defaultButtonBackground: '#f4f4f5', // zinc-100
-                    defaultButtonBackgroundHover: '#e4e4e7', // zinc-200
-                    defaultButtonBorder: '#e4e4e7',
-                    defaultButtonText: '#18181b',
-                    dividerBackground: '#e4e4e7',
+                    brand: '#fafafa',
+                    brandAccent: '#f4f4f5',
+                    brandButtonText: '#18181b',
+                    defaultButtonBackground: '#27272a',
+                    defaultButtonBackgroundHover: '#3f3f46',
+                    defaultButtonBorder: '#3f3f46',
+                    defaultButtonText: '#fafafa',
+                    dividerBackground: '#3f3f46',
                     inputBackground: 'transparent',
-                    inputBorder: '#e4e4e7',
-                    inputBorderHover: '#a1a1aa',
-                    inputBorderFocus: '#18181b',
-                    inputText: '#18181b',
-                    inputLabelText: '#52525b',
-                    inputPlaceholder: '#a1a1aa',
-                    messageText: '#52525b',
+                    inputBorder: '#3f3f46',
+                    inputBorderHover: '#71717a',
+                    inputBorderFocus: '#fafafa',
+                    inputText: '#fafafa',
+                    inputLabelText: '#a1a1aa',
+                    inputPlaceholder: '#71717a',
+                    messageText: '#a1a1aa',
                     messageTextDanger: '#ef4444',
-                    anchorTextColor: '#52525b',
-                    anchorTextHoverColor: '#18181b',
+                    anchorTextColor: '#a1a1aa',
+                    anchorTextHoverColor: '#fafafa',
                   },
                   space: {
                     buttonPadding: '10px 15px',

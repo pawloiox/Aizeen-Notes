@@ -100,25 +100,25 @@ export default function Home() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-white dark:bg-zinc-950 flex items-center justify-center">
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-          className="w-8 h-8 border-2 border-zinc-200 dark:border-zinc-800 border-t-zinc-500 dark:border-t-zinc-400 rounded-full"
+          className="w-8 h-8 border-2 border-zinc-800 border-t-zinc-400 rounded-full"
         />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 selection:bg-zinc-200 dark:selection:bg-zinc-800 selection:text-zinc-900 dark:selection:text-zinc-100 font-sans transition-colors duration-300 flex flex-col">
+    <div className="min-h-screen bg-zinc-950 text-zinc-50 selection:bg-zinc-800 selection:text-zinc-100 font-sans transition-colors duration-300 flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-900 transition-colors duration-300">
+      <header className="sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-900 transition-colors duration-300">
         <div className="w-full px-3 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 flex-1">
             <button 
               onClick={() => setIsSidebarOpen(true)}
-              className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+              className="p-2 rounded-full hover:bg-zinc-900 transition-colors text-zinc-400 hover:text-zinc-100"
             >
               <Menu size={24} />
             </button>
@@ -132,7 +132,7 @@ export default function Home() {
 
           <div className="w-full max-w-2xl px-4">
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500 group-focus-within:text-zinc-600 dark:group-focus-within:text-zinc-300 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-zinc-300 transition-colors">
                 <Search size={20} />
               </div>
               <input
@@ -140,7 +140,7 @@ export default function Home() {
                 placeholder="Search notes, tags..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-zinc-100/50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 focus:bg-zinc-100 dark:focus:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-300 dark:focus:border-zinc-700 rounded-full py-2.5 pl-11 pr-4 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-500 outline-none transition-all shadow-sm focus:shadow-md"
+                className="w-full bg-zinc-900/50 hover:bg-zinc-900 focus:bg-zinc-900 border border-zinc-800 focus:border-zinc-700 rounded-full py-2.5 pl-11 pr-4 text-zinc-100 placeholder:text-zinc-500 outline-none transition-all shadow-sm focus:shadow-md"
               />
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function Home() {
           <div className="flex items-center gap-2 flex-1 justify-end">
             <button
               onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-              className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hidden sm:block"
+              className="p-2 rounded-full hover:bg-zinc-900 transition-colors text-zinc-400 hover:text-zinc-100 hidden sm:block"
               title={viewMode === 'grid' ? 'List view' : 'Grid view'}
             >
               {viewMode === 'grid' ? <LayoutList size={20} /> : <LayoutGrid size={20} />}
@@ -159,7 +159,7 @@ export default function Home() {
                   await supabase.auth.signOut();
                   router.refresh();
                 }}
-                className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                className="p-2 rounded-full hover:bg-zinc-900 transition-colors text-zinc-400 hover:text-zinc-100"
                 title="Log out"
               >
                 <LogOut size={20} />
@@ -167,7 +167,7 @@ export default function Home() {
             ) : (
               <button
                 onClick={() => router.push('/login')}
-                className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                className="p-2 rounded-full hover:bg-zinc-900 transition-colors text-zinc-400 hover:text-zinc-100"
                 title="Log in / Sign up"
               >
                 <LogIn size={20} />
@@ -182,11 +182,11 @@ export default function Home() {
         <div className="w-full max-w-2xl mb-12">
           <div
             onClick={handleCreateNote}
-            className="w-full bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 flex items-center gap-4 cursor-text shadow-sm hover:shadow-md transition-all group"
+            className="w-full bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex items-center gap-4 cursor-text shadow-sm hover:shadow-md transition-all group"
           >
-            <span className="text-zinc-500 flex-1 text-lg group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors">Take a note...</span>
+            <span className="text-zinc-500 flex-1 text-lg group-hover:text-zinc-400 transition-colors">Take a note...</span>
             <div className="flex items-center gap-2 text-zinc-500">
-              <button className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">
+              <button className="p-2 rounded-full hover:bg-zinc-800 hover:text-zinc-300 transition-colors">
                 <Plus size={20} />
               </button>
             </div>

@@ -268,12 +268,14 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
               />
               
               {editor && (
-                <div className="flex items-center gap-1 mb-2 border-b border-white/10 pb-2 relative" ref={toolbarMenuContainerRef}>
-                  <FontSizeDrum editor={editor} />
+                <div className="flex items-center gap-1 mb-2 border-b border-white/10 pb-2 relative flex-wrap" ref={toolbarMenuContainerRef}>
+                  <div className="shrink-0">
+                    <FontSizeDrum editor={editor} />
+                  </div>
                   
-                  <div className="w-px h-4 bg-white/20 mx-1" />
+                  <div className="w-px h-4 bg-white/20 mx-1 shrink-0" />
                   
-                  <div className="relative">
+                  <div className="relative shrink-0">
                     <button
                       type="button"
                       onMouseDown={(e) => e.preventDefault()}
@@ -363,13 +365,13 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                     </AnimatePresence>
                   </div>
 
-                  <div className="w-px h-4 bg-white/20 mx-1" />
+                  <div className="w-px h-4 bg-white/20 mx-1 shrink-0" />
                   <button
                     type="button"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleBold().run()}
                     className={cn(
-                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('bold') && "bg-white/20 text-white"
                     )}
                     title="Bold"
@@ -381,7 +383,7 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleItalic().run()}
                     className={cn(
-                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('italic') && "bg-white/20 text-white"
                     )}
                     title="Italic"
@@ -393,7 +395,7 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleUnderline().run()}
                     className={cn(
-                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('underline') && "bg-white/20 text-white"
                     )}
                     title="Underline"
@@ -405,20 +407,20 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleStrike().run()}
                     className={cn(
-                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('strike') && "bg-white/20 text-white"
                     )}
                     title="Strikethrough"
                   >
                     <Strikethrough size={18} />
                   </button>
-                  <div className="w-px h-4 bg-white/20 mx-1" />
+                  <div className="w-px h-4 bg-white/20 mx-1 shrink-0" />
                   <button
                     type="button"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
                     className={cn(
-                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('bulletList') && "bg-white/20 text-white"
                     )}
                     title="Bullet List"
@@ -430,19 +432,19 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => editor.chain().focus().toggleOrderedList().run()}
                     className={cn(
-                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors",
+                      "p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0",
                       editor.isActive('orderedList') && "bg-white/20 text-white"
                     )}
                     title="Ordered List"
                   >
                     <ListOrdered size={18} />
                   </button>
-                  <div className="w-px h-4 bg-white/20 mx-1" />
+                  <div className="w-px h-4 bg-white/20 mx-1 shrink-0" />
                   <button
                     type="button"
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={() => fileInputRef.current?.click()}
-                    className="p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+                    className="p-1.5 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors shrink-0"
                     title="Add Image"
                   >
                     <ImageIcon size={18} />
