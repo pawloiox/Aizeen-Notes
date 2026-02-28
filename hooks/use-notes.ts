@@ -46,7 +46,9 @@ export function useNotes() {
               // Migrate local notes to database
               const notesToInsert = localNotes.map(n => ({
                 ...n,
-                user_id: user.id
+                user_id: user.id,
+                createdAt: typeof n.createdAt === 'number' ? new Date(n.createdAt).toISOString() : n.createdAt,
+                updatedAt: typeof n.updatedAt === 'number' ? new Date(n.updatedAt).toISOString() : n.updatedAt,
               }));
               
               const { error: insertError } = await supabase
@@ -63,6 +65,8 @@ export function useNotes() {
                 if (refreshedData) {
                   setNotes(refreshedData as Note[]);
                 }
+              } else {
+                console.error('Migration insert error:', insertError);
               }
             } else {
               localStorage.removeItem(STORAGE_KEY);
@@ -104,15 +108,19 @@ export function useNotes() {
       updatedAt: new Date().toISOString(),
       pinned: note.pinned || false,
       tags: note.tags || [],
+      image_urls: note.image_urls || [],
     };
     
     setNotes((prev) => [newNote, ...prev]);
 
     if (user) {
-      await supabase.from('notes').insert({
+      const { error } = await supabase.from('notes').insert({
         ...newNote,
         user_id: user.id
       });
+      if (error) {
+        console.error('Error inserting note:', error);
+      }
     }
   };
 
@@ -125,7 +133,10 @@ export function useNotes() {
     );
 
     if (user) {
-      await supabase.from('notes').update({ ...updates, updatedAt }).eq('id', id);
+      const { error } = await supabase.from('notes').update({ ...updates, updatedAt }).eq('id', id);
+      if (error) {
+        console.error('Error updating note:', error);
+      }
     }
   };
 
@@ -133,7 +144,10 @@ export function useNotes() {
     setNotes((prev) => prev.filter((note) => note.id !== id));
 
     if (user) {
-      await supabase.from('notes').delete().eq('id', id);
+      const { error } = await supabase.from('notes').delete().eq('id', id);
+      if (error) {
+        console.error('Error deleting note:', error);
+      }
     }
   };
 
@@ -151,7 +165,10 @@ export function useNotes() {
     );
 
     if (user) {
-      await supabase.from('notes').update({ pinned: newPinned, updatedAt }).eq('id', id);
+      const { error } = await supabase.from('notes').update({ pinned: newPinned, updatedAt }).eq('id', id);
+      if (error) {
+        console.error('Error toggling pin:', error);
+      }
     }
   };
 
