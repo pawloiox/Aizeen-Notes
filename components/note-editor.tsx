@@ -221,6 +221,8 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
                 <div className="flex items-center gap-1 mb-2 border-b border-white/10 pb-2 relative" ref={toolbarMenuContainerRef}>
                   <FontSizeDrum editor={editor} />
                   
+                  <div className="w-px h-4 bg-white/20 mx-1" />
+                  
                   <div className="relative">
                     <button
                       type="button"
