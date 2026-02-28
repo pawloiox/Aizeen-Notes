@@ -102,7 +102,11 @@ export default function LoginPage() {
               },
             }}
             providers={['google', 'github']}
-            redirectTo={`${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`}
+            redirectTo={
+              typeof window !== 'undefined' 
+                ? `${window.location.origin}/auth/callback`
+                : `${process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000'}/auth/callback`
+            }
           />
         </div>
       </motion.div>
