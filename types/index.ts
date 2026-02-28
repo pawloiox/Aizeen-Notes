@@ -3,10 +3,11 @@ export interface Note {
   title: string;
   content: string;
   color: string;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: string;
+  updatedAt: string;
   pinned: boolean;
   tags: string[];
+  image_urls?: string[];
 }
 
 export type NoteColor = 

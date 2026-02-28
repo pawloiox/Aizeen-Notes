@@ -6,11 +6,13 @@ import { NoteCard } from '@/components/note-card';
 import { NoteEditor } from '@/components/note-editor';
 import { MasonryGrid } from '@/components/masonry-grid';
 import { Note } from '@/types';
-import { Search, Plus, Menu, LayoutGrid, LayoutList } from 'lucide-react';
+import { Search, Plus, Menu, LayoutGrid, LayoutList, LogIn, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
 import { Sidebar } from '@/components/sidebar';
 import { SortableNoteCard } from '@/components/sortable-note-card';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 import {
   DndContext,
   closestCenter,
@@ -27,7 +29,8 @@ import {
 } from '@dnd-kit/sortable';
 
 export default function Home() {
-  const { notes, isLoaded, addNote, updateNote, deleteNote, togglePin, reorderNotes } = useNotes();
+  const router = useRouter();
+  const { notes, isLoaded, addNote, updateNote, deleteNote, togglePin, reorderNotes, user } = useNotes();
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -121,7 +124,7 @@ export default function Home() {
             </button>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center overflow-hidden">
-                <Image src="/img/AizeenLogo.png" alt="Aizeen Logo" width={32} height={32} className="object-contain" />
+                <Image src="https://vcytoiebdpgakwlabcnw.supabase.co/storage/v1/object/public/public-images/AizeenLogo.png" alt="Aizeen Logo" width={32} height={32} className="object-contain" />
               </div>
               <span className="text-xl font-medium tracking-tight hidden sm:block">Notes</span>
             </div>
@@ -150,6 +153,26 @@ export default function Home() {
             >
               {viewMode === 'grid' ? <LayoutList size={20} /> : <LayoutGrid size={20} />}
             </button>
+            {user ? (
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  router.refresh();
+                }}
+                className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                title="Log out"
+              >
+                <LogOut size={20} />
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push('/login')}
+                className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                title="Log in / Sign up"
+              >
+                <LogIn size={20} />
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -257,7 +280,7 @@ export default function Home() {
       <footer className="w-full py-8 flex justify-center items-center mt-auto">
         <a href="https://www.instagram.com/pawloiox/"> 
         <Image 
-          src="/img/PAG_logo.png" 
+          src="https://vcytoiebdpgakwlabcnw.supabase.co/storage/v1/object/public/public-images/PAG_logo.png" 
           alt="Developer Logo" 
           width={48} 
           height={48} 
@@ -272,6 +295,7 @@ export default function Home() {
         onClose={() => setIsEditorOpen(false)}
         note={editingNote}
         onSave={handleSaveNote}
+        user={user}
       />
 
       {/* Sidebar */}

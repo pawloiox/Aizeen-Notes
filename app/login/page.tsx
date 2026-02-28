@@ -37,7 +37,7 @@ export default function LoginPage() {
       >
         <div className="flex flex-col items-center mb-8">
           <Image 
-            src="https://imgur.com/iJLXUgO.png" 
+            src="https://vcytoiebdpgakwlabcnw.supabase.co/storage/v1/object/public/public-images/AizeenLogo.png" 
             alt="Aizeen Logo" 
             width={64} 
             height={64} 

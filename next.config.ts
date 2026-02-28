@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'i.imgur.com',
+        hostname: 'vcytoiebdpgakwlabcnw.supabase.co',
         port: '',
         pathname: '/**', // Allows all image paths from this domain
       },

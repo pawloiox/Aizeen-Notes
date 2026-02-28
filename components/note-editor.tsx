@@ -14,6 +14,9 @@ import { TextStyle } from '@tiptap/extension-text-style';
 import TextAlign from '@tiptap/extension-text-align';
 import { FontSize } from './extensions/font-size';
 import { FontSizeDrum } from './font-size-drum';
+import { User } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
+import imageCompression from 'browser-image-compression';
 
 const extensions = [
   StarterKit,
@@ -36,9 +39,10 @@ interface NoteEditorProps {
   onClose: () => void;
   note?: Note | null;
   onSave: (note: Partial<Note>) => void;
+  user?: User | null;
 }
 
-export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
+export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorProps) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [color, setColor] = useState<NoteColor>('default');
@@ -84,15 +88,49 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
     { label: 'Huge', value: '24px' },
   ];
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && editor) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        editor.chain().focus().setImage({ src: result }).run();
-      };
-      reader.readAsDataURL(file);
+      if (!user) {
+        alert('Please log in to upload images.');
+        return;
+      }
+
+      try {
+        // Compress image
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(file, options);
+
+        // Upload to Supabase
+        const fileExt = file.name.split('.').pop();
+        // eslint-disable-next-line react-hooks/purity
+        const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+        
+        const { data, error } = await supabase.storage
+          .from('notes-images')
+          .upload(fileName, compressedFile);
+
+        if (error) {
+          console.error('Error uploading image:', error);
+          alert('Failed to upload image.');
+          return;
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('notes-images')
+          .getPublicUrl(fileName);
+
+        // Insert into editor
+        editor.chain().focus().setImage({ src: publicUrl }).run();
+      } catch (error) {
+        console.error('Error processing image:', error);
+        alert('Failed to process image.');
+      }
     }
     // Reset input so the same file can be selected again
     if (e.target) {
@@ -120,7 +158,6 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
   useEffect(() => {
     if (isOpen) {
       if (note) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setTitle(note.title);
         setContent(note.content);
         setColor(note.color as NoteColor || 'default');
@@ -152,8 +189,21 @@ export function NoteEditor({ isOpen, onClose, note, onSave }: NoteEditorProps) {
   const handleSave = () => {
     const finalContent = editor?.isEmpty ? '' : content;
     
+    // Extract image URLs from the content
+    const imageUrls: string[] = [];
+    if (finalContent) {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = finalContent;
+      const images = tempDiv.querySelectorAll('img');
+      images.forEach((img) => {
+        if (img.src) {
+          imageUrls.push(img.src);
+        }
+      });
+    }
+    
     if (title.trim() || finalContent) {
-      onSave({ title, content: finalContent, color, tags });
+      onSave({ title, content: finalContent, color, tags, image_urls: imageUrls });
     }
     onClose();
   };
