@@ -553,7 +553,7 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute bottom-full left-0 mb-2 p-2 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-xl flex gap-2"
+                      className="absolute bottom-full left-0 mb-2 p-2 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-xl grid grid-cols-6 gap-2 w-max z-50"
                     >
                       {(Object.keys(colorMap) as NoteColor[]).map((c) => (
                         <button
@@ -565,7 +565,7 @@ export function NoteEditor({ isOpen, onClose, note, onSave, user }: NoteEditorPr
                           className={cn(
                             'w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 flex items-center justify-center',
                             colorMap[c].bg,
-                            color === c ? 'border-white' : 'border-transparent'
+                            color === c ? 'border-white' : 'border-white/20'
                           )}
                         >
                           {color === c && <Check size={14} className="text-white" />}
